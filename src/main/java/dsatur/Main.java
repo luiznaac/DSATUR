@@ -1,7 +1,9 @@
 package dsatur;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,9 +11,11 @@ public class Main {
 	
 	private static ArrayList<Vertex> graph, possibleVertex, computedVertex;
 	private static ArrayList<Boolean> colors;
-	private static String path;
+	private static String pathIn, pathOut;
 	private static FileReader fr;
 	private static BufferedReader textReader;
+	private static FileWriter fw;
+	private static BufferedWriter textWriter;
 	private static String line, id;
 	private static Vertex tempVertex; //1 - while building the graph: the vertex it will be associated adjacent vertexes to
 									  //2 - while running the algorithm: the vertex it is working with
@@ -19,6 +23,30 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		buildGraph();
+		computeGraph();
+		saveGraph();
+		
+	}
+	
+	public static void saveGraph() throws IOException {
+	
+		pathOut = "src/main/resources/out.csv";
+		fw = new FileWriter(pathOut);
+		textWriter = new BufferedWriter(fw);
+		String out = "";
+		
+		for(Vertex v : computedVertex) {
+			out += v + "\n";
+		}
+		
+		textWriter.write(out);
+		textWriter.close();
+		fw.close();
+		
+	}
+	
+	public static void computeGraph() {
+		
 		computedVertex = new ArrayList<>(); 
 		possibleVertex = new ArrayList<>();
 		colors = new ArrayList<>();
@@ -74,17 +102,13 @@ public class Main {
 		
 		computedVertex.sort(new IdComparator()); //sort the vertexes according to its id
 		
-		for(Vertex vertex : computedVertex) {
-			System.out.println(vertex);
-		}
-		
 	}
 	
 	public static void buildGraph() throws IOException {
 		
 		graph = new ArrayList<>();
-		path = "src/main/resources/entry.csv";
-		fr = new FileReader(path);
+		pathIn = "src/main/resources/in.csv";
+		fr = new FileReader(pathIn);
 		textReader = new BufferedReader(fr);
 		id = "";
 		
@@ -121,6 +145,10 @@ public class Main {
 				}
 			}
 		}
+		
+		textReader.close();
+		fr.close();
+		
 	}
 	
 	public static boolean graphContainsVertex(Vertex vertex) {

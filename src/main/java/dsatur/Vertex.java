@@ -75,13 +75,7 @@ public class Vertex {
 	}
 	
 	@Override
-	public String toString() {
-		//print adjacents vertexes and degree
-		/*String toPrint = "" + id;
-		for(int i = 0 ; i < adjacent.size() ; i++)
-			toPrint += ", " + adjacent.get(i).getId() + ": " + adjacent.get(i).getColor();
-		return toPrint;*/
-		
+	public String toString() {		
 		return id + ", " + (getColor()+1);
 	}
 	
