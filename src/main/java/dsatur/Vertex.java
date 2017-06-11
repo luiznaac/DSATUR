@@ -25,7 +25,7 @@ public class Vertex {
 	
 	public void setColor(int color) {
 		this.color = color;
-		updateAdjacents();
+		hasColor = true;
 	}
 	
 	public int getColor() {
@@ -33,6 +33,7 @@ public class Vertex {
 	}
 	
 	public void updateSatDegree() {
+		//when an adjacent vertex receives a color, the saturation of this.vertex increases 
 		satDegree++;
 	}
 	
@@ -40,8 +41,11 @@ public class Vertex {
 		return satDegree;
 	}
 	
-	public void updateDegree() {
-		degree++;
+	public void updateDegree(boolean op) {
+		if(op)
+			degree++;
+		else
+			degree--;
 	}
 	
 	public int getDegree() {
@@ -55,21 +59,30 @@ public class Vertex {
 	public void addAdjacent(Vertex vertex) {
 		if(!adjacent.contains(vertex)) {
 			adjacent.add(vertex);
-			updateDegree();
+			updateDegree(true);
 		}
 	}
 	
 	public void updateAdjacents() {
-		for(Vertex adj : adjacent)
+		for(Vertex adj : adjacent) {
 			adj.updateSatDegree();
+			adj.updateDegree(false);
+		}
+	}
+	
+	public ArrayList<Vertex> getAdjacent() {
+		return adjacent;
 	}
 	
 	@Override
 	public String toString() {
-		String toPrint = "" + id;
+		//print adjacents vertexes and degree
+		/*String toPrint = "" + id;
 		for(int i = 0 ; i < adjacent.size() ; i++)
-			toPrint += ", " + adjacent.get(i).getId();
-		return toPrint + " degree: " + getDegree();
+			toPrint += ", " + adjacent.get(i).getId() + ": " + adjacent.get(i).getColor();
+		return toPrint;*/
+		
+		return id + ", " + (getColor()+1);
 	}
 	
 }
