@@ -64,7 +64,7 @@ public class Main {
 			//the following iterations takes the vertex with the highest SATURATION degree
 			graph.sort(new SatDegreeComparator()); //sort the vertexes according to their saturation degree
 			int satAux = graph.get(0).getSatDegree(); //the first element is the one with the highest degree
-			for(Vertex v : graph) { //but there might be more then one vertex with the same saturation degree 
+			for(Vertex v : graph) { //but there might be more than one vertex with the same saturation degree 
 				if(v.getSatDegree() == satAux)
 					possibleVertex.add(v); //creates a list of the vertexes with the highest saturation degree
 			}
@@ -117,7 +117,7 @@ public class Main {
 			line += '\n'; //ensure it has an EOF
 			for(int i = 0 ; i < line.length() ; i++){
 				//gets the id reading only numbers, if something outside the number's range is found then it 
-				//means that it's read the whole id for that vertex and will continue to add that it to the graph
+				//means that it's read the whole id for that vertex and will continue to add it to the graph
 				if((line.charAt(i) >= 48) && (line.charAt(i) <= 57)) { //between 0 and 9 on the ASCII table
 					id += line.charAt(i);
 				}
