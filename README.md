@@ -1,0 +1,1 @@
+Resolução do problema de coloração de grafos utilizando o algoritmo DSATUR (Degree of Saturation) desenvolvida para a discliplina de Matemática Discreta (CSD21) na Universidade Tecnológica Federal do Paraná (UTFPR) e proposta pelo professor Ricardo Lüders.
