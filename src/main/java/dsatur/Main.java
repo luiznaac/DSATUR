@@ -23,8 +23,44 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		buildGraph();
+		long start = System.currentTimeMillis();
 		computeGraph();
+		long end = System.currentTimeMillis();
+		computeEndValues();
+		System.out.println("Runtime: " + (end - start) + " milliseconds.");
 		saveGraph();
+		
+	}
+	
+	public static void computeEndValues() {
+		
+		int nVertexes, nEdges = 0, maxSatDegree = 0, minSatDegree = 10, nColors;
+		float averageSatDegree = 0, standardDeviationSatDegree = 0;
+		nVertexes = computedVertex.size();
+		nColors = colors.size();
+		for(Vertex v1 : computedVertex) {
+			averageSatDegree += v1.getSatDegree();
+			if(v1.getSatDegree() > maxSatDegree)
+				maxSatDegree = v1.getSatDegree();
+			if(v1.getSatDegree() < minSatDegree)
+				minSatDegree = v1.getSatDegree();
+			for(Vertex v2 : v1.getAdjacent()) {
+				if(v2.getId() > v1.getId())
+					nEdges++;
+			}
+		}
+		averageSatDegree = averageSatDegree/(float)nVertexes;
+		for(Vertex v1 : computedVertex) 
+			standardDeviationSatDegree += Math.pow(v1.getSatDegree() - averageSatDegree, 2);
+		standardDeviationSatDegree = (float)Math.sqrt(standardDeviationSatDegree);
+		
+		System.out.println("No. Vertexes: " + nVertexes + 
+						   "\nNo. Edges: " + nEdges + 
+						   "\nMin Sat Degree: " + minSatDegree + 
+						   "\nMax Sat Degree: " + maxSatDegree +
+						   "\nSat Degree Average: " + averageSatDegree +
+						   "\nSat Degree Standard Deviation: " + standardDeviationSatDegree +
+						   "\nNo. Colors: " + nColors);
 		
 	}
 	
@@ -56,7 +92,7 @@ public class Main {
 		tempVertex = graph.get(0); //the first element is the one with the highest degree
 		tempVertex.setColor(0); //sets the first color to it
 		colors.add(0, true); //update the list of colors
-		tempVertex.updateAdjacents(); //update its adjacent vertexes
+		tempVertex.updateAdjacents(0); //update its adjacent vertexes
 		computedVertex.add(tempVertex); //add it to the list of computed vertexes
 		graph.remove(tempVertex); //remove it from the main graph (now the graph is the remaining "subgraph")
 		
@@ -78,7 +114,8 @@ public class Main {
 			
 			boolean hasAvailableColor = false; 
 			int availableColor = 0;
-			for(int i = 0 ; i < colors.size() && !hasAvailableColor ; i++) { //looks after the minimal color it can have
+			//looks after the minimal color it can have
+			for(int i = 0 ; i < colors.size() && !hasAvailableColor ; i++) { 
 				if(colors.get(i) == true) {
 					hasAvailableColor = true;
 					availableColor = i;
@@ -87,12 +124,12 @@ public class Main {
 			
 			if(!hasAvailableColor) { //if there's none, then create a new color
 				tempVertex.setColor(colors.size());
-				colors.add(colors.size(), true);
-			} else {
+				availableColor = colors.size();
+				colors.add(availableColor, true);
+			} else
 				tempVertex.setColor(availableColor); //else set the minimal to the vertex
-			}
 			
-			tempVertex.updateAdjacents();
+			tempVertex.updateAdjacents(availableColor);
 			computedVertex.add(tempVertex);
 			graph.remove(tempVertex);
 			
